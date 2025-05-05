@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL") // Usa o mesmo banco para migrações
+}
+
+model usuarios {
+  id               Int               @id @default(autoincrement()) @map("id")
+  cpf              String            @unique @db.VarChar(14) @map("cpf")
+  foto             String?           @db.VarChar(500) @map("foto")
+  email            String            @unique @db.VarChar(100) @map("email")
+  data_nascimento  DateTime?         @map("data_nascimento")
+  nome             String            @db.VarChar(100) @map("nome")
+  senha            String            @db.VarChar(100) @map("senha")
+  professores      professores?
+  estudantes       estudantes?
+  jogo_da_velha    jogo_da_velha[]
+
+  @@map("usuarios")
+}
+
+model professores {
+  fk_usuarios_id  Int          @id @map("fk_usuarios_id")
+  siape           Int          @unique @map("siape")
+  usuario         usuarios     @relation(fields: [fk_usuarios_id], references: [id])
+  disciplinas     disciplinas[]
+
+  @@map("professores")
+}
+
+model estudantes {
+  fk_usuarios_id  Int            @id @map("fk_usuarios_id")
+  ra              Int            @unique @map("ra")
+  usuario         usuarios       @relation(fields: [fk_usuarios_id], references: [id])
+  matricula_se    matricula_se[]
+
+  @@map("estudantes")
+}
+
+model disciplinas {
+  id                             Int             @id @default(autoincrement()) @map("id")
+  periodo                        Int?            @map("periodo")
+  turno                          String?         @db.VarChar(14) @map("turno")
+  nome                           String          @db.VarChar(100) @map("nome")
+  qnt_total_aulas                Int?            @map("qnt_total_aulas")
+  carga_horaria                  Float           @map("carga_horaria")
+  curso                          String          @db.VarChar(100) @map("curso")
+  fk_professores_fk_usuarios_id  Int             @map("fk_professores_fk_usuarios_id")
+  professor                      professores     @relation(fields: [fk_professores_fk_usuarios_id], references: [fk_usuarios_id])
+  matricula_se                   matricula_se[]
+
+  @@map("disciplinas")
+}
+
+model jogo_da_velha {
+  id              Int       @id @default(autoincrement()) @map("id")
+  player1         String?   @db.VarChar(100) @map("player1")
+  player2         String?   @db.VarChar(100) @map("player2")
+  resultado       String?   @db.VarChar(100) @map("resultado")
+  data_jogo       DateTime? @map("data_jogo")
+  fk_usuarios_id  Int       @map("fk_usuarios_id")
+  usuario         usuarios  @relation(fields: [fk_usuarios_id], references: [id])
+
+  @@map("jogo_da_velha")
+}
+
+model matricula_se {
+  fk_disciplinas_id              Int         @map("fk_disciplinas_id")
+  fk_estudantes_fk_usuarios_id   Int         @map("fk_estudantes_fk_usuarios_id")
+  n1                             Float?      @map("n1")
+  n2                             Float?      @map("n2")
+  media                          Float?      @map("media")
+  faltas                         Int?        @map("faltas")
+  situacao                       String?     @db.VarChar(20) @map("situacao")
+  disciplina                     disciplinas @relation(fields: [fk_disciplinas_id], references: [id])
+  estudante                      estudantes  @relation(fields: [fk_estudantes_fk_usuarios_id], references: [fk_usuarios_id])
+
+  @@id([fk_disciplinas_id, fk_estudantes_fk_usuarios_id])
+  @@map("matricula_se")
+}
