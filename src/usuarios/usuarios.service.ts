@@ -1,27 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { PrismaService } from '../prisma.service';
+import { Usuario, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsuariosService {
-  async create(data: { cpf: string; nome: string; email: string; senha: string }) {
-    return prisma.usuario.create({ data });
+  constructor(private prisma: PrismaService) {}
+
+  async create(data: Prisma.UsuarioCreateInput): Promise<Usuario> {
+    return this.prisma.usuario.create({ data });
   }
 
-  async findAll() {
-    return prisma.usuario.findMany();
+  async findAll(): Promise<Usuario[]> {
+    return this.prisma.usuario.findMany();
   }
 
-  async findOne(id: number) {
-    return prisma.usuario.findUnique({ where: { id } });
+  async findOne(id: number): Promise<Usuario | null> {
+    return this.prisma.usuario.findUnique({ where: { id } });
   }
 
-  async update(id: number, data: any) {
-    return prisma.usuario.update({ where: { id }, data });
+  async update(id: number, data: Prisma.UsuarioUpdateInput): Promise<Usuario> {
+    return this.prisma.usuario.update({ where: { id }, data });
   }
 
-  async remove(id: number) {
-    return prisma.usuario.delete({ where: { id } });
+  async remove(id: number): Promise<Usuario> {
+    return this.prisma.usuario.delete({ where: { id } });
   }
 }
