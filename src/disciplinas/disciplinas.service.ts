@@ -1,39 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class DisciplinasService {
-  async create(data: { 
-    nome: string; 
-    carga_horaria: number; 
-    fk_professores_fk_usuarios_id: number 
-  }) {
-    return prisma.disciplina.create({ data });
+  // constructor(private readonly prisma: PrismaService) {}
+
+  async create(data: any): Promise<any> {
+    // return this.prisma.disciplinas.create({ data });
+    return { message: 'Disciplina criada', data };
   }
 
-  async findAll() {
-    return prisma.disciplina.findMany({
-      include: { professor: { include: { usuario: true } } },
-    });
+  async findAll(): Promise<any[]> {
+    // return this.prisma.disciplinas.findMany();
+    return [{ id: 1, nome: 'Matemática' }];
   }
 
-  async findOne(id: number) {
-    return prisma.disciplina.findUnique({ 
-      where: { id },
-      include: { professor: { include: { usuario: true } } },
-    });
+  async findOne(id: number): Promise<any> {
+    // return this.prisma.disciplinas.findUnique({ where: { id } });
+    return { id, nome: 'Física' };
   }
 
-  async update(id: number, data: any) {
-    return prisma.disciplina.update({
-      where: { id },
-      data,
-    });
+  async update(id: number, data: any): Promise<any> {
+    // return this.prisma.disciplinas.update({ where: { id }, data });
+    return { message: 'Disciplina atualizada', id, data };
   }
 
-  async remove(id: number) {
-    return prisma.disciplina.delete({ where: { id } });
+  async remove(id: number): Promise<any> {
+    // return this.prisma.disciplinas.delete({ where: { id } });
+    return { message: 'Disciplina removida', id };
   }
 }

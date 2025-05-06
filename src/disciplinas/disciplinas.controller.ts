@@ -6,27 +6,27 @@ export class DisciplinasController {
   constructor(private readonly disciplinasService: DisciplinasService) {}
 
   @Post()
-  create(@Body() data: any) {
+  async create(@Body() data: any): Promise<any> {
     return this.disciplinasService.create(data);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<any[]> {
     return this.disciplinasService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<any> {
     return this.disciplinasService.findOne(+id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
+  async update(@Param('id') id: string, @Body() data: any): Promise<any> {
     return this.disciplinasService.update(+id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<any> {
     return this.disciplinasService.remove(+id);
   }
 }
