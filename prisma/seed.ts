@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.usuario.createMany({
+  await prisma.usuarios.createMany({
     data: [
       { id: 1, cpf: "12345678901", nome: "Admin", email: "admin@siga.com", senha: "123" },
       { id: 2, cpf: "98765432101", nome: "Professor 1", email: "prof1@siga.com", senha: "123" },
@@ -10,10 +10,10 @@ async function main() {
     ],
   });
 
-  await prisma.professor.create({ data: { fk_usuarios_id: 2, siape: 12345 } });
-  await prisma.estudante.create({ data: { fk_usuarios_id: 3, ra: 1001 } });
+  await prisma.professores.create({ data: { fk_usuarios_id: 2, siape: 12345 } });
+  await prisma.estudantes.create({ data: { fk_usuarios_id: 3, ra: 1001 } });
 
-  await prisma.disciplina.create({
+  await prisma.disciplinas.create({
     data: {
       nome: "Programação Web",
       carga_horaria: 60,
