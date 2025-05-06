@@ -5,24 +5,31 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class JogosService {
-  async create(data: { 
-    player1: string;
-    player2: string;
-    resultado: string;
-    fk_usuarios_id: number;
-  }) {
-    return prisma.jogoDaVelha.create({ data });
+  async create(data: any) {
+    return await prisma.jogo_da_velha.create({ data });
   }
 
   async findAll() {
-    return prisma.jogoDaVelha.findMany({
-      include: { usuario: true },
+    return await prisma.jogo_da_velha.findMany({
+      include: { usuario: true }
     });
   }
 
-  async findByUsuario(usuarioId: number) {
-    return prisma.jogoDaVelha.findMany({
-      where: { fk_usuarios_id: usuarioId },
+  async findOne(id: number) {
+    return await prisma.jogo_da_velha.findUnique({
+      where: { id },
+      include: { usuario: true }
     });
+  }
+
+  async update(id: number, data: any) {
+    return await prisma.jogo_da_velha.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async remove(id: number) {
+    return await prisma.jogo_da_velha.delete({ where: { id } });
   }
 }

@@ -5,31 +5,31 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class EstudantesService {
-  async create(data: { ra: number; fk_usuarios_id: number }) {
-    return prisma.estudante.create({ data });
+  async create(data: any) {
+    return await prisma.estudantes.create({ data });
   }
 
   async findAll() {
-    return prisma.estudante.findMany({
-      include: { usuario: true }, // Traz os dados do usuário relacionado
+    return await prisma.estudantes.findMany({
+      include: { usuario: true }
     });
   }
 
   async findOne(id: number) {
-    return prisma.estudante.findUnique({ 
+    return await prisma.estudantes.findUnique({ 
       where: { fk_usuarios_id: id },
-      include: { usuario: true },
+      include: { usuario: true }
     });
   }
 
   async update(id: number, data: any) {
-    return prisma.estudante.update({
+    return await prisma.estudantes.update({
       where: { fk_usuarios_id: id },
       data,
     });
   }
 
   async remove(id: number) {
-    return prisma.estudante.delete({ where: { fk_usuarios_id: id } });
+    return await prisma.estudantes.delete({ where: { fk_usuarios_id: id } });
   }
 }

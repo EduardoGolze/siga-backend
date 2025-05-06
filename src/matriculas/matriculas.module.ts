@@ -3,7 +3,7 @@ import { MatriculasService } from './matriculas.service';
 import { MatriculasController } from './matriculas.controller';
 
 @Module({
+  controllers: [MatriculasController],
   providers: [MatriculasService],
-  controllers: [MatriculasController]
 })
 export class MatriculasModule {}

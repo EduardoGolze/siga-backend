@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { ProfessoresModule } from './professores/professores.module';
 import { EstudantesModule } from './estudantes/estudantes.module';
@@ -13,7 +15,9 @@ import { JogosModule } from './jogos/jogos.module';
     EstudantesModule,
     DisciplinasModule,
     MatriculasModule,
-    JogosModule,
+    JogosModule
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

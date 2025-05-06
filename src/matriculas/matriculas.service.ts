@@ -5,48 +5,50 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class MatriculasService {
-  async create(data: { 
-    fk_disciplinas_id: number;
-    fk_estudantes_fk_usuarios_id: number;
-    n1?: number;
-    n2?: number;
-  }) {
-    return prisma.matriculaSe.create({ data });
+  async create(data: any) {
+    return await prisma.matricula_se.create({ data });
   }
 
   async findAll() {
-    return prisma.matriculaSe.findMany({
-      include: { disciplina: true, estudante: { include: { usuario: true } } },
+    return await prisma.matricula_se.findMany({
+      include: {
+        disciplina: true,
+        estudante: { include: { usuario: true } }
+      }
     });
   }
 
-  async findByDisciplina(disciplinaId: number) {
-    return prisma.matriculaSe.findMany({
-      where: { fk_disciplinas_id: disciplinaId },
-      include: { estudante: { include: { usuario: true } } },
+  async findOne(disciplinaId: number, estudanteId: number) {
+    return await prisma.matricula_se.findUnique({
+      where: {
+        fk_disciplinas_id_fk_estudantes_fk_usuarios_id: {
+          fk_disciplinas_id: disciplinaId,
+          fk_estudantes_fk_usuarios_id: estudanteId
+        }
+      }
     });
   }
 
   async update(disciplinaId: number, estudanteId: number, data: any) {
-    return prisma.matriculaSe.update({
-      where: { 
+    return await prisma.matricula_se.update({
+      where: {
         fk_disciplinas_id_fk_estudantes_fk_usuarios_id: {
           fk_disciplinas_id: disciplinaId,
-          fk_estudantes_fk_usuarios_id: estudanteId,
-        },
+          fk_estudantes_fk_usuarios_id: estudanteId
+        }
       },
-      data,
+      data
     });
   }
 
   async remove(disciplinaId: number, estudanteId: number) {
-    return prisma.matriculaSe.delete({
-      where: { 
+    return await prisma.matricula_se.delete({
+      where: {
         fk_disciplinas_id_fk_estudantes_fk_usuarios_id: {
           fk_disciplinas_id: disciplinaId,
-          fk_estudantes_fk_usuarios_id: estudanteId,
-        },
-      },
+          fk_estudantes_fk_usuarios_id: estudanteId
+        }
+      }
     });
   }
 }

@@ -6,8 +6,8 @@ export class EstudantesController {
   constructor(private readonly estudantesService: EstudantesService) {}
 
   @Post()
-  create(@Body() data: any) {
-    return this.estudantesService.create(data);
+  create(@Body() body: any) {
+    return this.estudantesService.create(body);
   }
 
   @Get()
@@ -21,8 +21,8 @@ export class EstudantesController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    return this.estudantesService.update(+id, data);
+  update(@Param('id') id: string, @Body() body: any) {
+    return this.estudantesService.update(+id, body);
   }
 
   @Delete(':id')

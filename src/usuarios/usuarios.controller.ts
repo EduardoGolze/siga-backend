@@ -6,8 +6,8 @@ export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 
   @Post()
-  create(@Body() data: any) {
-    return this.usuariosService.create(data);
+  create(@Body() body: any) {
+    return this.usuariosService.create(body);
   }
 
   @Get()
@@ -21,8 +21,8 @@ export class UsuariosController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    return this.usuariosService.update(+id, data);
+  update(@Param('id') id: string, @Body() body: any) {
+    return this.usuariosService.update(+id, body);
   }
 
   @Delete(':id')

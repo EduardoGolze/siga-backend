@@ -5,17 +5,16 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("DATABASE_URL") // Usa o mesmo banco para migrações
 }
 
 model usuarios {
-  id               Int               @id @default(autoincrement()) @map("id")
-  cpf              String            @unique @db.VarChar(14) @map("cpf")
-  foto             String?           @db.VarChar(500) @map("foto")
-  email            String            @unique @db.VarChar(100) @map("email")
-  data_nascimento  DateTime?         @map("data_nascimento")
-  nome             String            @db.VarChar(100) @map("nome")
-  senha            String            @db.VarChar(100) @map("senha")
+  id               Int               @id @default(autoincrement())
+  cpf              String            @unique @db.VarChar(14)
+  foto             String?           @db.VarChar(500)
+  email            String            @unique @db.VarChar(100)
+  data_nascimento  DateTime?
+  nome             String            @db.VarChar(100)
+  senha            String            @db.VarChar(100)
   professores      professores?
   estudantes       estudantes?
   jogo_da_velha    jogo_da_velha[]
@@ -24,8 +23,8 @@ model usuarios {
 }
 
 model professores {
-  fk_usuarios_id  Int          @id @map("fk_usuarios_id")
-  siape           Int          @unique @map("siape")
+  fk_usuarios_id  Int          @id
+  siape           Int          @unique
   usuario         usuarios     @relation(fields: [fk_usuarios_id], references: [id])
   disciplinas     disciplinas[]
 
@@ -33,8 +32,8 @@ model professores {
 }
 
 model estudantes {
-  fk_usuarios_id  Int            @id @map("fk_usuarios_id")
-  ra              Int            @unique @map("ra")
+  fk_usuarios_id  Int            @id
+  ra              Int            @unique
   usuario         usuarios       @relation(fields: [fk_usuarios_id], references: [id])
   matricula_se    matricula_se[]
 
@@ -42,14 +41,14 @@ model estudantes {
 }
 
 model disciplinas {
-  id                             Int             @id @default(autoincrement()) @map("id")
-  periodo                        Int?            @map("periodo")
-  turno                          String?         @db.VarChar(14) @map("turno")
-  nome                           String          @db.VarChar(100) @map("nome")
-  qnt_total_aulas                Int?            @map("qnt_total_aulas")
-  carga_horaria                  Float           @map("carga_horaria")
-  curso                          String          @db.VarChar(100) @map("curso")
-  fk_professores_fk_usuarios_id  Int             @map("fk_professores_fk_usuarios_id")
+  id                             Int             @id @default(autoincrement())
+  periodo                        Int?
+  turno                          String?         @db.VarChar(14)
+  nome                           String          @db.VarChar(100)
+  qnt_total_aulas                Int?
+  carga_horaria                  Float
+  curso                          String          @db.VarChar(100)
+  fk_professores_fk_usuarios_id  Int
   professor                      professores     @relation(fields: [fk_professores_fk_usuarios_id], references: [fk_usuarios_id])
   matricula_se                   matricula_se[]
 
@@ -57,25 +56,25 @@ model disciplinas {
 }
 
 model jogo_da_velha {
-  id              Int       @id @default(autoincrement()) @map("id")
-  player1         String?   @db.VarChar(100) @map("player1")
-  player2         String?   @db.VarChar(100) @map("player2")
-  resultado       String?   @db.VarChar(100) @map("resultado")
-  data_jogo       DateTime? @map("data_jogo")
-  fk_usuarios_id  Int       @map("fk_usuarios_id")
+  id              Int       @id @default(autoincrement())
+  player1         String?   @db.VarChar(100)
+  player2         String?   @db.VarChar(100)
+  resultado       String?   @db.VarChar(100)
+  data_jogo       DateTime?
+  fk_usuarios_id  Int
   usuario         usuarios  @relation(fields: [fk_usuarios_id], references: [id])
 
   @@map("jogo_da_velha")
 }
 
 model matricula_se {
-  fk_disciplinas_id              Int         @map("fk_disciplinas_id")
-  fk_estudantes_fk_usuarios_id   Int         @map("fk_estudantes_fk_usuarios_id")
-  n1                             Float?      @map("n1")
-  n2                             Float?      @map("n2")
-  media                          Float?      @map("media")
-  faltas                         Int?        @map("faltas")
-  situacao                       String?     @db.VarChar(20) @map("situacao")
+  fk_disciplinas_id              Int
+  fk_estudantes_fk_usuarios_id   Int
+  n1                             Float?
+  n2                             Float?
+  media                          Float?
+  faltas                         Int?
+  situacao                       String?     @db.VarChar(20)
   disciplina                     disciplinas @relation(fields: [fk_disciplinas_id], references: [id])
   estudante                      estudantes  @relation(fields: [fk_estudantes_fk_usuarios_id], references: [fk_usuarios_id])
 

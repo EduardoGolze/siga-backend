@@ -6,8 +6,8 @@ export class MatriculasController {
   constructor(private readonly matriculasService: MatriculasService) {}
 
   @Post()
-  create(@Body() data: any) {
-    return this.matriculasService.create(data);
+  create(@Body() body: any) {
+    return this.matriculasService.create(body);
   }
 
   @Get()
@@ -15,24 +15,27 @@ export class MatriculasController {
     return this.matriculasService.findAll();
   }
 
-  @Get('disciplina/:disciplinaId')
-  findByDisciplina(@Param('disciplinaId') disciplinaId: string) {
-    return this.matriculasService.findByDisciplina(+disciplinaId);
+  @Get(':disciplinaId/:estudanteId')
+  findOne(
+    @Param('disciplinaId') disciplinaId: string,
+    @Param('estudanteId') estudanteId: string
+  ) {
+    return this.matriculasService.findOne(+disciplinaId, +estudanteId);
   }
 
   @Put(':disciplinaId/:estudanteId')
   update(
     @Param('disciplinaId') disciplinaId: string,
     @Param('estudanteId') estudanteId: string,
-    @Body() data: any,
+    @Body() body: any
   ) {
-    return this.matriculasService.update(+disciplinaId, +estudanteId, data);
+    return this.matriculasService.update(+disciplinaId, +estudanteId, body);
   }
 
   @Delete(':disciplinaId/:estudanteId')
   remove(
     @Param('disciplinaId') disciplinaId: string,
-    @Param('estudanteId') estudanteId: string,
+    @Param('estudanteId') estudanteId: string
   ) {
     return this.matriculasService.remove(+disciplinaId, +estudanteId);
   }
