@@ -5,79 +5,74 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model usuarios {
-  id               Int               @id @default(autoincrement())
-  cpf              String            @unique @db.VarChar(14)
-  foto             String?           @db.VarChar(500)
-  email            String            @unique @db.VarChar(100)
-  data_nascimento  DateTime?
-  nome             String            @db.VarChar(100)
-  senha            String            @db.VarChar(100)
-  professores      professores?
-  estudantes       estudantes?
-  jogo_da_velha    jogo_da_velha[]
-
+model Usuario {
+  id              Int             @id @default(autoincrement())
+  cpf             String          @db.VarChar(14)
+  foto            String?         @db.VarChar(500)
+  email           String          @db.VarChar(100)
+  data_nascimento DateTime?
+  nome            String          @db.VarChar(100)
+  senha           String          @db.VarChar(100)
+  professor       Professor?
+  estudante       Estudante?
+  jogos           JogoDaVelha[]
   @@map("usuarios")
 }
 
-model professores {
-  fk_usuarios_id  Int          @id
-  siape           Int          @unique
-  usuario         usuarios     @relation(fields: [fk_usuarios_id], references: [id])
-  disciplinas     disciplinas[]
-
+model Professor {
+  fk_usuarios_id  Int         @id
+  siape           Int         @unique
+  usuario         Usuario     @relation(fields: [fk_usuarios_id], references: [id])
+  disciplinas     Disciplina[]
   @@map("professores")
 }
 
-model estudantes {
-  fk_usuarios_id  Int            @id
-  ra              Int            @unique
-  usuario         usuarios       @relation(fields: [fk_usuarios_id], references: [id])
-  matricula_se    matricula_se[]
-
+model Estudante {
+  fk_usuarios_id  Int           @id
+  ra              Int           @unique
+  usuario         Usuario       @relation(fields: [fk_usuarios_id], references: [id])
+  matriculas      MatriculaSe[]
   @@map("estudantes")
 }
 
-model disciplinas {
-  id                             Int             @id @default(autoincrement())
-  periodo                        Int?
-  turno                          String?         @db.VarChar(14)
-  nome                           String          @db.VarChar(100)
-  qnt_total_aulas                Int?
-  carga_horaria                  Float
-  curso                          String          @db.VarChar(100)
-  fk_professores_fk_usuarios_id  Int
-  professor                      professores     @relation(fields: [fk_professores_fk_usuarios_id], references: [fk_usuarios_id])
-  matricula_se                   matricula_se[]
-
+model Disciplina {
+  id                              Int             @id @default(autoincrement())
+  periodo                         Int?
+  turno                           String?         @db.VarChar(14)
+  nome                            String          @db.VarChar(100)
+  qnt_total_aulas                 Int?
+  carga_horaria                   Float
+  curso                           String          @db.VarChar(100)
+  fk_professores_fk_usuarios_id   Int
+  professor                       Professor       @relation(fields: [fk_professores_fk_usuarios_id], references: [fk_usuarios_id])
+  matriculas                      MatriculaSe[]
   @@map("disciplinas")
 }
 
-model jogo_da_velha {
-  id              Int       @id @default(autoincrement())
-  player1         String?   @db.VarChar(100)
-  player2         String?   @db.VarChar(100)
-  resultado       String?   @db.VarChar(100)
+model JogoDaVelha {
+  id              Int         @id @default(autoincrement())
+  player1         String?     @db.VarChar(100)
+  player2         String?     @db.VarChar(100)
+  resultado       String?     @db.VarChar(100)
   data_jogo       DateTime?
   fk_usuarios_id  Int
-  usuario         usuarios  @relation(fields: [fk_usuarios_id], references: [id])
-
+  usuario         Usuario     @relation(fields: [fk_usuarios_id], references: [id])
   @@map("jogo_da_velha")
 }
 
-model matricula_se {
-  fk_disciplinas_id              Int
-  fk_estudantes_fk_usuarios_id   Int
-  n1                             Float?
-  n2                             Float?
-  media                          Float?
-  faltas                         Int?
-  situacao                       String?     @db.VarChar(20)
-  disciplina                     disciplinas @relation(fields: [fk_disciplinas_id], references: [id])
-  estudante                      estudantes  @relation(fields: [fk_estudantes_fk_usuarios_id], references: [fk_usuarios_id])
-
-  @@id([fk_disciplinas_id, fk_estudantes_fk_usuarios_id])
+model MatriculaSe {
+  fk_disciplinas_id               Int
+  fk_estudantes_fk_usuarios_id    Int
+  n1                              Float?
+  n2                              Float?
+  media                           Float?
+  faltas                          Int?
+  situacao                        String?         @db.VarChar(20)
+  disciplina                      Disciplina      @relation(fields: [fk_disciplinas_id], references: [id])
+  estudante                       Estudante       @relation(fields: [fk_estudantes_fk_usuarios_id], references: [fk_usuarios_id])
   @@map("matricula_se")
+  @@id([fk_disciplinas_id, fk_estudantes_fk_usuarios_id])
 }
