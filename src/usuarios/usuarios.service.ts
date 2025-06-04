@@ -1,30 +1,32 @@
+
 import { Injectable } from '@nestjs/common';
+
 import { PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
-
 @Injectable()
 export class UsuariosService {
-  async create(data: any) {
-    return await prisma.usuarios.create({ data });
-  }
+async create(data: any) {
 
-  async findAll() {
-    return await prisma.usuarios.findMany();
-  }
 
-  async findOne(id: number) {
-    return await prisma.usuarios.findUnique({ where: { id } });
-  }
+return await prisma.usuario.create({ data });
+}
+async findAll() {
 
-  async update(id: number, data: any) {
-    return await prisma.usuarios.update({
-      where: { id },
-      data,
-    });
-  }
+return await prisma.usuario.findMany();
+}
+async findOne(id: number) {
 
-  async remove(id: number) {
-    return await prisma.usuarios.delete({ where: { id } });
-  }
+return await prisma.usuario.findUnique({ where: { id } });
+}
+async update(id: number, data: any) {
+
+return await prisma.usuario.update({
+where: { id }, 
+data, 
+});
+}
+async remove(id: number) {
+
+return await prisma.usuario.delete({ where: { id } });
+}
 }

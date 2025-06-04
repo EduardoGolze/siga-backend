@@ -3,7 +3,7 @@ import { DisciplinasService } from './disciplinas.service';
 import { DisciplinasController } from './disciplinas.controller';
 
 @Module({
-  controllers: [DisciplinasController],
   providers: [DisciplinasService],
+  controllers: [DisciplinasController]
 })
 export class DisciplinasModule {}
